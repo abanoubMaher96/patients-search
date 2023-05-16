@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import ListPage from "./layout/listPage/ListPage";
+import DetailsPage from "./layout/detailsPage/DetailsPage";
 
 export default function RouteComponent() {
   return (
@@ -11,6 +12,7 @@ export default function RouteComponent() {
 
           <Routes>
             <Route path="/" element={<ListPage />} />
+            <Route path="/details" element={<DetailsPage />} />
           </Routes>
         </div>
       </div>

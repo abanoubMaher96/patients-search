@@ -1,50 +1,54 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Form, Stack, Table } from "react-bootstrap";
 import "./Style.scss";
 import patientsMockData from "../../assets/mock_data.json";
 import { useDebounce } from "use-debounce";
 import { isValidEmail } from "../../utils";
+import { Link } from "react-router-dom";
+import patientsSearchSlice from "../../utils/patientsSearch";
 
 const ListPage = () => {
-  const [searchValue, setSearchValue] = useState(null);
-  const [value] = useDebounce(searchValue, 500);
-  const [sex, setSex] = useState(1);
-  const [age, setAge] = useState(1);
-  const [sorting, setSorting] = useState(1);
+  const { patientsListIds } = useSelector((state) => state.patientsList);
+  const { patientInfo, sex, age, sorting } = useSelector(
+    (state) => state.patientsSearch
+  );
+  const [value] = useDebounce(patientInfo, 500);
+
+  const patientsData = patientsMockData.filter((e) =>
+    patientsListIds.includes(e.patient_id)
+  );
+  const dispatch = useDispatch();
+  const { setPatientInfo, setAge, setSex, setSorting } =
+    patientsSearchSlice.actions;
 
   const patientsDataFilter = useMemo(() => {
-    if (sex === "2" || sex === "3") {
-      let patientSex = sex === "2" ? "Male" : "Female";
+    if (sex === "Male" || sex === "Female") {
+      // write switch case with short hand
       switch (age) {
         case "2":
-          return patientsMockData.filter(
-            (e) => e.gender === patientSex && e.age < 31
-          );
+          return patientsData.filter((e) => e.gender === sex && e.age < 31);
         case "3":
-          return patientsMockData.filter(
-            (e) => e.gender === patientSex && e.age < 45
-          );
+          return patientsData.filter((e) => e.gender === sex && e.age < 45);
         case "4":
-          return patientsMockData.filter(
-            (e) => e.gender === patientSex && e.age > 45
-          );
+          return patientsData.filter((e) => e.gender === sex && e.age > 45);
 
         default:
-          return patientsMockData.filter((e) => e.gender === patientSex);
+          return patientsData.filter((e) => e.gender === sex);
       }
     } else
       switch (age) {
         case "2":
-          return patientsMockData.filter((e) => e.age < 31);
+          return patientsData.filter((e) => e.age < 31);
         case "3":
-          return patientsMockData.filter((e) => e.age > 30 && e.age < 45);
+          return patientsData.filter((e) => e.age > 30 && e.age < 45);
         case "4":
-          return patientsMockData.filter((e) => e.age > 45);
+          return patientsData.filter((e) => e.age > 45);
 
         default:
-          return patientsMockData;
+          return patientsData;
       }
-  }, [sex, age]);
+  }, [sex, age, patientsData]);
 
   const patientsDataSearch = useMemo(() => {
     if (value && !isNaN(+value)) {
@@ -62,7 +66,7 @@ const ListPage = () => {
   }, [value, age, sex]);
 
   const searchFunc = async (e) => {
-    setSearchValue(e.target.value);
+    dispatch(setPatientInfo(e.target.value));
   };
 
   return (
@@ -73,23 +77,24 @@ const ListPage = () => {
           placeholder="Please enter patient's name, ID or email"
           className="w-50"
           onChange={searchFunc}
+          defaultValue={patientInfo}
         />
         <Form.Group>
           <Form.Select
             onChange={(e) => {
-              setSex(e.target.value);
+              dispatch(setSex(e.target.value));
             }}
           >
             <option disabled>Sex</option>
             <option value="1">All</option>
-            <option value="2">Male</option>
-            <option value="3">Female</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
           </Form.Select>
         </Form.Group>
         <Form.Group>
           <Form.Select
             onChange={(e) => {
-              setAge(e.target.value);
+              dispatch(setAge(e.target.value));
             }}
           >
             <option disabled>Age</option>
@@ -102,7 +107,7 @@ const ListPage = () => {
         <Form.Group>
           <Form.Select
             onChange={(e) => {
-              setSorting(Number(e.target.value));
+              dispatch(setSorting(Number(e.target.value)));
             }}
           >
             <option disabled>Sorting</option>
@@ -127,7 +132,16 @@ const ListPage = () => {
               )
               .map((e) => (
                 <tr key={e.patient_id}>
-                  <td>{e.patient_id}</td>
+                  <td>
+                    <Link
+                      to="/details"
+                      state={{
+                        userData: e,
+                      }}
+                    >
+                      {e.patient_id}
+                    </Link>
+                  </td>
                   <td>{`${e.first_name} ${e.last_name}`}</td>
                 </tr>
               ))
