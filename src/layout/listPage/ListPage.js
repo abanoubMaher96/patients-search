@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Form, Stack, Table } from "react-bootstrap";
+import { Button, Form, Stack, Table } from "react-bootstrap";
 import patientsMockData from "../../assets/mock_data.json";
 import { useDebounce } from "use-debounce";
 import { isValidEmail } from "../../utils";
@@ -23,8 +23,6 @@ const ListPage = () => {
 
   const patientsDataFilter = useMemo(() => {
     let genderCheck = sex === "Male" || sex === "Female";
-    // if (sex === "Male" || sex === "Female") {
-    // write switch case with short hand
     switch (age) {
       case "2":
         return patientsData.filter((e) =>
@@ -46,18 +44,6 @@ const ListPage = () => {
           ? patientsData.filter((e) => e.gender === sex)
           : patientsData;
     }
-    // } else
-    //   switch (age) {
-    //     case "2":
-    //       return patientsData.filter((e) => e.age < 31);
-    //     case "3":
-    //       return patientsData.filter((e) => e.age > 30 && e.age < 45);
-    //     case "4":
-    //       return patientsData.filter((e) => e.age > 45);
-
-    //     default:
-    //       return patientsData;
-    //   }
   }, [sex, age, patientsData]);
 
   const patientsDataSearch = useMemo(() => {

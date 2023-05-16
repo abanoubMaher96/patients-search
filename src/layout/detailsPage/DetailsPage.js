@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Table } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ModalComp from "../../component/modal/ModalComp";
 import patientsSlice from "../../utils/patientsSlice";
 import { useDispatch } from "react-redux";
@@ -48,6 +48,10 @@ const DetailsPage = () => {
           </tr>
         </tbody>
       </Table>
+      <Button variant="success">
+        {" "}
+        <Link to="/">Go Back</Link>
+      </Button>
     </div>
   );
 };
