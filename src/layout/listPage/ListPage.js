@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Form, Stack, Table } from "react-bootstrap";
-import "./Style.scss";
 import patientsMockData from "../../assets/mock_data.json";
 import { useDebounce } from "use-debounce";
 import { isValidEmail } from "../../utils";
@@ -23,31 +22,42 @@ const ListPage = () => {
     patientsSearchSlice.actions;
 
   const patientsDataFilter = useMemo(() => {
-    if (sex === "Male" || sex === "Female") {
-      // write switch case with short hand
-      switch (age) {
-        case "2":
-          return patientsData.filter((e) => e.gender === sex && e.age < 31);
-        case "3":
-          return patientsData.filter((e) => e.gender === sex && e.age < 45);
-        case "4":
-          return patientsData.filter((e) => e.gender === sex && e.age > 45);
+    let genderCheck = sex === "Male" || sex === "Female";
+    // if (sex === "Male" || sex === "Female") {
+    // write switch case with short hand
+    switch (age) {
+      case "2":
+        return patientsData.filter((e) =>
+          genderCheck ? e.gender === sex && e.age < 31 : e.age < 31
+        );
+      case "3":
+        return patientsData.filter((e) =>
+          genderCheck
+            ? e.gender === sex && e.age > 30 && e.age < 45
+            : e.age > 30 && e.age < 45
+        );
+      case "4":
+        return patientsData.filter((e) =>
+          genderCheck ? e.gender === sex && e.age > 45 : e.age > 45
+        );
 
-        default:
-          return patientsData.filter((e) => e.gender === sex);
-      }
-    } else
-      switch (age) {
-        case "2":
-          return patientsData.filter((e) => e.age < 31);
-        case "3":
-          return patientsData.filter((e) => e.age > 30 && e.age < 45);
-        case "4":
-          return patientsData.filter((e) => e.age > 45);
+      default:
+        return genderCheck
+          ? patientsData.filter((e) => e.gender === sex)
+          : patientsData;
+    }
+    // } else
+    //   switch (age) {
+    //     case "2":
+    //       return patientsData.filter((e) => e.age < 31);
+    //     case "3":
+    //       return patientsData.filter((e) => e.age > 30 && e.age < 45);
+    //     case "4":
+    //       return patientsData.filter((e) => e.age > 45);
 
-        default:
-          return patientsData;
-      }
+    //     default:
+    //       return patientsData;
+    //   }
   }, [sex, age, patientsData]);
 
   const patientsDataSearch = useMemo(() => {
@@ -84,6 +94,7 @@ const ListPage = () => {
             onChange={(e) => {
               dispatch(setSex(e.target.value));
             }}
+            defaultValue={sex}
           >
             <option disabled>Sex</option>
             <option value="1">All</option>
@@ -96,6 +107,7 @@ const ListPage = () => {
             onChange={(e) => {
               dispatch(setAge(e.target.value));
             }}
+            defaultValue={age}
           >
             <option disabled>Age</option>
             <option value="1">All</option>
@@ -109,6 +121,7 @@ const ListPage = () => {
             onChange={(e) => {
               dispatch(setSorting(Number(e.target.value)));
             }}
+            defaultValue={sorting}
           >
             <option disabled>Sorting</option>
             <option value="1">Ascending </option>

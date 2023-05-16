@@ -11,7 +11,6 @@ const ModalComp = ({
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  // const onConfirm = () => {setShow(false);};
 
   return (
     <>
