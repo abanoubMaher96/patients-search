@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Table } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ModalComp from "../../component/modal/ModalComp";
-import patientsSlice from "../../utils/patientsSlice";
+import patientsSlice from "../../utils/redux/patientsSlice";
 import { useDispatch } from "react-redux";
 
 const DetailsPage = () => {

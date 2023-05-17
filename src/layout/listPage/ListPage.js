@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Form, Stack, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import patientsMockData from "../../assets/mock_data.json";
 import { useDebounce } from "use-debounce";
 import { isValidEmail } from "../../utils";
 import { Link } from "react-router-dom";
-import patientsSearchSlice from "../../utils/patientsSearch";
+import patientsSearchSlice from "../../utils/redux/patientsSearchSlice";
 import ListFiltersBar from "../../component/listFiltersBar/ListFiltersBar";
 
 const ListPage = () => {

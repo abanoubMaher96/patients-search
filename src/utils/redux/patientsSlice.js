@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import patientsMockData from "../assets/mock_data.json";
+import patientsMockData from "../../assets/mock_data.json";
 
 let result = patientsMockData.map((a) => a.patient_id);
 const patientsSlice = createSlice({

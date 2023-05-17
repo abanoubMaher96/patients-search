@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import patientsSlice from "./patientsSlice";
-import patientsSearchSlice from "./patientsSearch";
+import patientsSearchSlice from "./patientsSearchSlice";
 const store = configureStore({
   reducer: {
     patientsList: patientsSlice.reducer,
