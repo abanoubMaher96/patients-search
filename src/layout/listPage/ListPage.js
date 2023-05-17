@@ -6,6 +6,7 @@ import { useDebounce } from "use-debounce";
 import { isValidEmail } from "../../utils";
 import { Link } from "react-router-dom";
 import patientsSearchSlice from "../../utils/patientsSearch";
+import ListFiltersBar from "../../component/listFiltersBar/ListFiltersBar";
 
 const ListPage = () => {
   const { patientsListIds } = useSelector((state) => state.patientsList);
@@ -65,56 +66,52 @@ const ListPage = () => {
     dispatch(setPatientInfo(e.target.value));
   };
 
+  const filtersArr = [
+    {
+      defaultValue: sex,
+      onValueChange: (e) => {
+        dispatch(setSex(e.target.value));
+      },
+      disabledValue: "Sex",
+      options: [
+        { value: "1", label: "All" },
+        { value: "Male", label: "Male" },
+        { value: "Female", label: "Female" },
+      ],
+    },
+    {
+      defaultValue: age,
+      onValueChange: (e) => {
+        dispatch(setAge(e.target.value));
+      },
+      disabledValue: "Age",
+      options: [
+        { value: "1", label: "All" },
+        { value: "2", label: "18 - 30" },
+        { value: "3", label: "31 - 45" },
+        { value: "4", label: "> 45" },
+      ],
+    },
+    {
+      defaultValue: sorting,
+      onValueChange: (e) => {
+        dispatch(setSorting(e.target.value));
+      },
+      disabledValue: "Sorting",
+      options: [
+        { value: "1", label: "Ascending" },
+        { value: "-1", label: "Descending" },
+      ],
+    },
+  ];
+
   return (
     <div className="mx-auto container">
-      <Stack direction="horizontal" className="mt-5 mb-2" gap={4}>
-        <Form.Control
-          type="text"
-          placeholder="Please enter patient's name, ID or email"
-          className="w-50"
-          onChange={searchFunc}
-          defaultValue={patientInfo}
-        />
-        <Form.Group>
-          <Form.Select
-            onChange={(e) => {
-              dispatch(setSex(e.target.value));
-            }}
-            defaultValue={sex}
-          >
-            <option disabled>Sex</option>
-            <option value="1">All</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </Form.Select>
-        </Form.Group>
-        <Form.Group>
-          <Form.Select
-            onChange={(e) => {
-              dispatch(setAge(e.target.value));
-            }}
-            defaultValue={age}
-          >
-            <option disabled>Age</option>
-            <option value="1">All</option>
-            <option value="2">18 - 30</option>
-            <option value="3">31 - 45</option>
-            <option value="4"> &gt; 45</option>
-          </Form.Select>
-        </Form.Group>
-        <Form.Group>
-          <Form.Select
-            onChange={(e) => {
-              dispatch(setSorting(Number(e.target.value)));
-            }}
-            defaultValue={sorting}
-          >
-            <option disabled>Sorting</option>
-            <option value="1">Ascending </option>
-            <option value="-1"> Descending </option>
-          </Form.Select>
-        </Form.Group>
-      </Stack>
+      <ListFiltersBar
+        searchFunc={searchFunc}
+        searchDefaultValue={patientInfo}
+        formSelectArr={filtersArr}
+      />
 
       <Table striped bordered hover>
         <thead>
@@ -141,7 +138,16 @@ const ListPage = () => {
                       {e.patient_id}
                     </Link>
                   </td>
-                  <td>{`${e.first_name} ${e.last_name}`}</td>
+                  <td>
+                    <Link
+                      to="/details"
+                      state={{
+                        userData: e,
+                      }}
+                    >
+                      {`${e.first_name} ${e.last_name}`}
+                    </Link>
+                  </td>
                 </tr>
               ))
           ) : (

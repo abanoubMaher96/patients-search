@@ -13,7 +13,7 @@ const DetailsPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="mx-auto container">
+    <div className="mx-auto container mt-3">
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -49,7 +49,6 @@ const DetailsPage = () => {
         </tbody>
       </Table>
       <Button variant="success">
-        {" "}
         <Link to="/">Go Back</Link>
       </Button>
     </div>
