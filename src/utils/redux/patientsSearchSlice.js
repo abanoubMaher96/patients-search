@@ -19,5 +19,7 @@ const patientsSearchSlice = createSlice({
     },
   },
 });
+export const { setPatientInfo, setAge, setSex, setSorting } =
+  patientsSearchSlice.actions;
 
-export default patientsSearchSlice;
+export default patientsSearchSlice.reducer;

@@ -18,4 +18,6 @@ const patientsSlice = createSlice({
   },
 });
 
-export default patientsSlice;
+export const { removeFromList, updateList } = patientsSlice.actions;
+
+export default patientsSlice.reducer;

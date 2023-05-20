@@ -5,46 +5,48 @@ import patientsMockData from "../../assets/mock_data.json";
 import { useDebounce } from "use-debounce";
 import { isValidEmail } from "../../utils";
 import { Link } from "react-router-dom";
-import patientsSearchSlice from "../../utils/redux/patientsSearchSlice";
+import {
+  setPatientInfo,
+  setAge,
+  setSex,
+  setSorting,
+} from "../../utils/redux/patientsSearchSlice";
 import ListFiltersBar from "../../component/listFiltersBar/ListFiltersBar";
 
 const ListPage = () => {
   const { patientsListIds } = useSelector((state) => state.patientsList);
+  const dispatch = useDispatch();
   const { patientInfo, sex, age, sorting } = useSelector(
     (state) => state.patientsSearch
   );
   const [value] = useDebounce(patientInfo, 500);
 
-  const patientsData = patientsMockData.filter((e) =>
-    patientsListIds.includes(e.patient_id)
-  );
-  const dispatch = useDispatch();
-  const { setPatientInfo, setAge, setSex, setSorting } =
-    patientsSearchSlice.actions;
+  const patientsData = useMemo(() => {
+    return patientsMockData.filter((e) =>
+      patientsListIds.includes(e.patient_id)
+    );
+  }, [patientsListIds]);
 
   const patientsDataFilter = useMemo(() => {
-    let genderCheck = sex === "Male" || sex === "Female";
-    switch (age) {
-      case "2":
-        return patientsData.filter((e) =>
-          genderCheck ? e.gender === sex && e.age < 31 : e.age < 31
+    const filterFunction = (e) => {
+      if (sex === "Male" || sex === "Female") {
+        return (
+          (age === "2" && e.gender === sex && e.age < 31) ||
+          (age === "3" && e.gender === sex && e.age > 30 && e.age < 45) ||
+          (age === "4" && e.gender === sex && e.age > 45) ||
+          (!["2", "3", "4"].includes(age) && e.gender === sex)
         );
-      case "3":
-        return patientsData.filter((e) =>
-          genderCheck
-            ? e.gender === sex && e.age > 30 && e.age < 45
-            : e.age > 30 && e.age < 45
+      } else {
+        return (
+          (age === "2" && e.age < 31) ||
+          (age === "3" && e.age > 30 && e.age < 45) ||
+          (age === "4" && e.age > 45) ||
+          !["2", "3", "4"].includes(age)
         );
-      case "4":
-        return patientsData.filter((e) =>
-          genderCheck ? e.gender === sex && e.age > 45 : e.age > 45
-        );
+      }
+    };
 
-      default:
-        return genderCheck
-          ? patientsData.filter((e) => e.gender === sex)
-          : patientsData;
-    }
+    return patientsData.filter(filterFunction);
   }, [sex, age, patientsData]);
 
   const patientsDataSearch = useMemo(() => {

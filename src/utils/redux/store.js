@@ -3,8 +3,8 @@ import patientsSlice from "./patientsSlice";
 import patientsSearchSlice from "./patientsSearchSlice";
 const store = configureStore({
   reducer: {
-    patientsList: patientsSlice.reducer,
-    patientsSearch: patientsSearchSlice.reducer,
+    patientsList: patientsSlice,
+    patientsSearch: patientsSearchSlice,
   },
 });
 

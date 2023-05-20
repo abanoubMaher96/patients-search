@@ -2,13 +2,12 @@ import React from "react";
 import { Button, Table } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ModalComp from "../../component/modal/ModalComp";
-import patientsSlice from "../../utils/redux/patientsSlice";
+import { removeFromList } from "../../utils/redux/patientsSlice";
 import { useDispatch } from "react-redux";
 
 const DetailsPage = () => {
   const location = useLocation();
   const { userData } = location.state;
-  const { removeFromList } = patientsSlice.actions;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,6 +21,7 @@ const DetailsPage = () => {
             <th>Email</th>
             <th>Gender</th>
             <th>Age</th>
+            <th>Image</th>
             <th></th>
           </tr>
         </thead>
@@ -32,6 +32,9 @@ const DetailsPage = () => {
             <td>{userData.email}</td>
             <td>{userData.gender}</td>
             <td>{userData.age}</td>
+            <td>
+              <img src={userData.avatar} alt="user_image" />
+            </td>
             <td>
               <Button variant="danger">
                 <ModalComp
